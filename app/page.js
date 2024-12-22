@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 
 const countries = [
   {
@@ -952,6 +952,8 @@ const countries = [
   }
 ];
 
+
+
 export default function Home() {
   const [currentCountry, setCurrentCountry] = useState(null);
   const [nextCountry, setNextCountry] = useState(null);
@@ -987,17 +989,24 @@ export default function Home() {
     }
   };
 
-  // Start the game when the page loads
-  if (!currentCountry) startGame();
+  // Use effect to trigger startGame on the client side
+  useEffect(() => {
+    if (!currentCountry && !nextCountry) {
+      startGame();
+    }
+  }, [currentCountry, nextCountry]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-black text-white">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-zinc-950 to-indigo-950 text-white">
       <div className="text-center mb-[20vh]">
-        <h1 className="text-6xl font-bold mb-8">Country Population: Higher or Lower?</h1>
+        <h1 className="text-6xl font-bold mb-8">Country Population: <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">Higher</span> or <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-red-500 to-purple-500">Lower</span>?</h1>
         {gameOver ? (
           <div className="game-over">
             <h2 className="text-2xl mb-4">Game Over!</h2>
-            <p>Your Score: {score}</p>
+            <p className="text-4xl">Your Score: {score}</p>
+          <div className="answer">
+          <h3 className="text-5xl my-4">{nextCountry?.name} has a population of: {nextCountry?.population.toLocaleString()}</h3>
+          </div>
             <button
               onClick={() => window.location.reload()}
               className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-400"
@@ -1008,18 +1017,18 @@ export default function Home() {
         ) : (
           <div className="game flex justify-between items-center mt-[24vh]  w-full max-w-8xl mx-auto p-4">
             {/* Left Section: Current Country */}
-            <div className="current-country w-1/2 text-center">
+            <div className="current-country w-1/2 text-gray-100 text-center">
               <p className="font-bold text-5xl">{currentCountry?.name}</p>
-              <p className="text-2xl">Population: {currentCountry?.population.toLocaleString()}</p>
+              <p className="text-2xl pt-4 ">Population: {currentCountry?.population.toLocaleString()}</p>
             </div>
 
             {/* Divider Line */}
             <div className="divider w-1 px-2 bg-white"></div>
 
             {/* Right Section: Next Country */}
-            <div className="next-country w-1/2 text-center">
+            <div className="next-country w-1/2 text-gray-100 text-center">
               <p className="font-bold text-5xl">{nextCountry?.name}</p>
-              <p className="text-2xl">&nbsp;</p>
+              <p className="text-2xl pt-4">&nbsp;</p>
             </div>
           </div>
         )}
