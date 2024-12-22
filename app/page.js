@@ -379,10 +379,6 @@ const countries = [
     "population": 10214441
   },
   {
-    "name": "Israel",
-    "population": 10003000
-  },
-  {
     "name": "Honduras",
     "population": 9892632
   },
